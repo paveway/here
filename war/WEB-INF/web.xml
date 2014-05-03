@@ -41,8 +41,12 @@
     <servlet-class>info.paveway.here.LoginHandlerServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>LocationServlet</servlet-name>
-    <servlet-class>info.paveway.here.LocationServlet</servlet-class>
+    <servlet-name>SetLocationServlet</servlet-name>
+    <servlet-class>info.paveway.here.SetLocationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DeleteLocationServlet</servlet-name>
+    <servlet-class>info.paveway.here.DeleteLocationServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -58,8 +62,12 @@
     <url-pattern>/loginhandler</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>LocationServlet</servlet-name>
-    <url-pattern>/location</url-pattern>
+    <servlet-name>SetLocationServlet</servlet-name>
+    <url-pattern>/setlocation</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DeleteLocationServlet</servlet-name>
+    <url-pattern>/deletelocation</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>

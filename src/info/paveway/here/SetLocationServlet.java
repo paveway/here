@@ -20,9 +20,9 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
-public class LocationServlet extends HttpServlet {
+public class SetLocationServlet extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(LocationServlet.class.getName());
+    private static final Logger logger = Logger.getLogger(SetLocationServlet.class.getName());
 
     /**
      * POSTメソッドの処理を行う。
