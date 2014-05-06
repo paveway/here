@@ -15,4 +15,15 @@ public class CommonConstants {
         public static final String USER = "user";
         public static final String NICKNAME = "nickname";
     }
+
+    public class ENCODING {
+        public static final String UTF_8 = "UTF-8";
+    }
+
+    public class Key {
+        public static final String ID = "id";
+        public static final String NICKNAME = "nickname";
+        public static final String LATITUDE = "latitude";
+        public static final String LONGITUDE = "longitude";
+    }
 }

@@ -1,5 +1,7 @@
 package info.paveway.here;
 
+import info.paveway.here.CommonConstants.ENCODING;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -19,10 +21,39 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
+/**
+ * ロケーションデータ設定サーブレットクラス
+ *
+ * @version 1.0 新規作成
+ *
+ */
 @SuppressWarnings("serial")
 public class SetLocationServlet extends HttpServlet {
 
+    /** ロガー */
     private static final Logger logger = Logger.getLogger(SetLocationServlet.class.getName());
+
+    /** コンテントタイプ */
+    private static final String CONTENT_TYPE = "text/html; charset=" + ENCODING.UTF_8;
+
+    /**
+     * GETメソッドの処理を行う。
+     *
+     * @param request HTTPサーブレットリクエスト
+     * @param response HTTPサーブレットレスポンス
+     * @throws IOException IO例外
+     * @throws ServletException サーブレット例外
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        logger.log(Level.INFO, "IN");
+
+        // POSメソッドの処理を呼び出す。
+        doPost(request, response);
+
+        logger.log(Level.INFO, "OUT(OK)");
+    }
 
     /**
      * POSTメソッドの処理を行う。
@@ -39,9 +70,11 @@ public class SetLocationServlet extends HttpServlet {
 
         // リクエストからデータを取得する。
         String id = request.getParameter("id");
+        String nickname = request.getParameter("nickname");
+        if (null == nickname) { nickname = ""; }
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
-        logger.log(Level.CONFIG, "id=[" + id + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
+        logger.log(Level.CONFIG, "id=[" + id + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
 
         // データが取得できた場合
         if (StringUtil.isNotNullOrEmpty(id       ) &&
@@ -52,13 +85,16 @@ public class SetLocationServlet extends HttpServlet {
             PersistenceManager pm = PMF.get().getPersistenceManager();
             try {
                 // 取得したロケーションデータを登録/更新する。
-                registLocationData(pm, id, latitude, longitude);
+                registLocationData(pm, id, nickname, latitude, longitude);
 
                 // 登録済みのロケーションデータリストを取得する。
                 List<LocationData> locationDataList = getLocationDataList(pm);
 
                 // ロケーションデータリストからJSON文字列を取得する。
                 String json = createJsonString(locationDataList);
+
+                // コンテントタイプを設定する。
+                response.setContentType(CONTENT_TYPE);
 
                 // JSON文字列を出力する。
                 outputResponse(response, json);
@@ -79,8 +115,8 @@ public class SetLocationServlet extends HttpServlet {
      * @param latitude 経度
      * @param longitude 緯度
      */
-    private void registLocationData(PersistenceManager pm, String id, String latitude, String longitude) {
-        logger.log(Level.CONFIG, "IN id=[" + id + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
+    private void registLocationData(PersistenceManager pm, String id, String nickname, String latitude, String longitude) {
+        logger.log(Level.CONFIG, "IN id=[" + id + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
 
         // 登録済みロケーションデータを取得する。
         LocationData locationData = getLocationData(pm, id);
@@ -89,7 +125,8 @@ public class SetLocationServlet extends HttpServlet {
         if (null != locationData) {
             logger.log(Level.CONFIG, "locationData exist.");
 
-            // 緯度、経度データを更新する。
+            // ニックネーム、緯度、経度データを更新する。
+            locationData.setNickname(nickname);
             locationData.setLatitude(latitude);
             locationData.setLongitude(longitude);
 
@@ -97,7 +134,7 @@ public class SetLocationServlet extends HttpServlet {
         } else {
             logger.log(Level.CONFIG, "locationData not exist.");
 
-            locationData = new LocationData(id, latitude, longitude);
+            locationData = new LocationData(id, nickname, latitude, longitude);
         }
 
         // ロケーションデータを登録/更新する。
@@ -134,7 +171,7 @@ public class SetLocationServlet extends HttpServlet {
 
     /**
      * ロケーションデータリストを取得する。
-     * 
+     *
      * @param pm
      * @return
      */
@@ -161,9 +198,10 @@ public class SetLocationServlet extends HttpServlet {
 
             Map<String, String> jsonMap = new HashMap<String, String>();
             jsonMap.put("id",        data.getId());
+            jsonMap.put("nickname",  data.getNickname());
             jsonMap.put("latitude",  data.getLatitude());
             jsonMap.put("longitude", data.getLongitude());
-            logger.log(Level.CONFIG, "id=[" + data.getId() + "] latitude=[" + String.valueOf(data.getLatitude()) + "] longitude=[" + String.valueOf(data.getLongitude()) + "]");
+            logger.log(Level.CONFIG, "id=[" + data.getId() + "] nickname=[" + data.getNickname() + "] latitude=[" + String.valueOf(data.getLatitude()) + "] longitude=[" + String.valueOf(data.getLongitude()) + "]");
 
             locations[i] = new JSONObject(jsonMap);
         }
@@ -178,7 +216,7 @@ public class SetLocationServlet extends HttpServlet {
     }
 
     private void outputResponse(HttpServletResponse response, String json) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), ENCODING.UTF_8));
         bw.write(json);
         bw.flush();
         bw.close();
