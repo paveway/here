@@ -41,6 +41,10 @@
     <servlet-class>info.paveway.here.LoginHandlerServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>InitServlet</servlet-name>
+    <servlet-class>info.paveway.here.InitServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>SetLocationServlet</servlet-name>
     <servlet-class>info.paveway.here.SetLocationServlet</servlet-class>
   </servlet>
@@ -60,6 +64,10 @@
   <servlet-mapping>
     <servlet-name>LoginHandlerServlet</servlet-name>
     <url-pattern>/loginhandler</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>InitServlet</servlet-name>
+    <url-pattern>/init</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SetLocationServlet</servlet-name>
