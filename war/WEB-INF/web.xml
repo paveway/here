@@ -45,6 +45,10 @@
     <servlet-class>info.paveway.here.InitServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>EnterServlet</servlet-name>
+    <servlet-class>info.paveway.here.EnterServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>SetLocationServlet</servlet-name>
     <servlet-class>info.paveway.here.SetLocationServlet</servlet-class>
   </servlet>
@@ -68,6 +72,10 @@
   <servlet-mapping>
     <servlet-name>InitServlet</servlet-name>
     <url-pattern>/init</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EnterServlet</servlet-name>
+    <url-pattern>/enter</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SetLocationServlet</servlet-name>

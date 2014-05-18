@@ -13,7 +13,5 @@ public class DeleteLocationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         String id = request.getParameter("id");
-
-
     }
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class UseRoomServlet extends HttpServlet {
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
