@@ -45,6 +45,9 @@ public class CommonConstants {
 
     /** キー */
     public class Key {
+        /** ID */
+        public static final String ID = "id";
+
         /** 部屋番号 */
         public static final String ROOM_NO = "roomNo";
 
@@ -57,13 +60,15 @@ public class CommonConstants {
         /** ニックネーム */
         public static final String NICKNAME = "nickname";
 
-        /** ID */
-        public static final String ID = "id";
-
         /** 緯度 */
         public static final String LATITUDE = "latitude";
 
         /** 経度 */
         public static final String LONGITUDE = "longitude";
+
+        /** 処理結果 */
+        public static final String STATUS = "status";
+
+        public static final String LOCATIONS = "locations";
     }
 }

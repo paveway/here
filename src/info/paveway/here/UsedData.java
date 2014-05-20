@@ -6,14 +6,31 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+/**
+ * 使用中データクラス
+ *
+ * @version 1.0 新規作成
+ *
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class UsedData {
 
+    /** ID */
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @PrimaryKey private Long id;
+
+    /** 部屋番号 */
     @Persistent private Long roomNo;
+
+    /** ユーザ */
     @Persistent private String userId;
 
+    /**
+     * コンストラクタ
+     *
+     * @param roomNo 部屋番号
+     * @param userId ユーザーID
+     */
     public UsedData(Long roomNo, String userId) {
         this.roomNo = roomNo;
         this.userId = userId;

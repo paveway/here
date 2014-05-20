@@ -1,6 +1,7 @@
 package info.paveway.here;
 
 import info.paveway.here.CommonConstants.ENCODING;
+import info.paveway.here.CommonConstants.Key;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -69,23 +70,27 @@ public class SetLocationServlet extends HttpServlet {
         logger.log(Level.INFO, "IN");
 
         // リクエストからデータを取得する。
-        String id = request.getParameter("id");
-        String nickname = request.getParameter("nickname");
-        if (null == nickname) { nickname = ""; }
-        String latitude = request.getParameter("latitude");
-        String longitude = request.getParameter("longitude");
-        logger.log(Level.CONFIG, "id=[" + id + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
+        String userId       = request.getParameter(Key.USER_ID  );
+        String roomNoString = request.getParameter(Key.ROOM_NO  );
+        String nickname     = request.getParameter(Key.NICKNAME );
+        String latitude     = request.getParameter(Key.LATITUDE );
+        String longitude    = request.getParameter(Key.LONGITUDE);
+        logger.log(Level.CONFIG, "userId=[" + userId + "] roomNo=[" + roomNoString + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
 
         // データが取得できた場合
-        if (StringUtil.isNotNullOrEmpty(id       ) &&
-            StringUtil.isNotNullOrEmpty(latitude ) &&
+        if (StringUtil.isNotNullOrEmpty(userId      ) &&
+            StringUtil.isNotNullOrEmpty(roomNoString) &&
+            StringUtil.isNotNullOrEmpty(nickname    ) &&
+            StringUtil.isNotNullOrEmpty(latitude    ) &&
             StringUtil.isNotNullOrEmpty(longitude)) {
+
+            long roomNo = Long.parseLong(roomNoString);
 
             // パーシステンスマネージャーを取得する。
             PersistenceManager pm = PMF.get().getPersistenceManager();
             try {
                 // 取得したロケーションデータを登録/更新する。
-                registLocationData(pm, id, nickname, latitude, longitude);
+                registLocationData(pm, userId, roomNo, nickname, latitude, longitude);
 
                 // 登録済みのロケーションデータリストを取得する。
                 List<LocationData> locationDataList = getLocationDataList(pm);
@@ -111,15 +116,17 @@ public class SetLocationServlet extends HttpServlet {
      * ロケーションデータを登録/更新する。
      *
      * @param pm パーシステンスマネージャー
-     * @param id ID
+     * @param userId ユーザーID
+     * @param roomNo 部屋番号
+     * @param nickname ニックネーム
      * @param latitude 経度
      * @param longitude 緯度
      */
-    private void registLocationData(PersistenceManager pm, String id, String nickname, String latitude, String longitude) {
-        logger.log(Level.CONFIG, "IN id=[" + id + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
+    private void registLocationData(PersistenceManager pm, String userId, long roomNo, String nickname, String latitude, String longitude) {
+        logger.log(Level.CONFIG, "IN id=[" + userId + "] roomNo=[" + roomNo + "] nickname=[" + nickname + "] latitude=[" + latitude + "] longitude=[" + longitude + "]");
 
         // 登録済みロケーションデータを取得する。
-        LocationData locationData = getLocationData(pm, id);
+        LocationData locationData = getLocationData(pm, userId);
 
         // ロケーションデータが登録済みの場合
         if (null != locationData) {
@@ -134,7 +141,7 @@ public class SetLocationServlet extends HttpServlet {
         } else {
             logger.log(Level.CONFIG, "locationData not exist.");
 
-            locationData = new LocationData(id, nickname, latitude, longitude);
+            locationData = new LocationData(userId, roomNo, nickname, latitude, longitude);
         }
 
         // ロケーションデータを登録/更新する。
@@ -148,17 +155,17 @@ public class SetLocationServlet extends HttpServlet {
      * ロケーションデータを取得する。
      *
      * @param pm パーシステンスマネージャー
-     * @param id ID
+     * @param userId ユーザーID
      * @return ロケーションデータ 未登録の場合はnull
      */
     @SuppressWarnings("unchecked")
-    private LocationData getLocationData(PersistenceManager pm, String id) {
-        logger.log(Level.CONFIG, "IN id=[" + id + "]");
+    private LocationData getLocationData(PersistenceManager pm, String userId) {
+        logger.log(Level.CONFIG, "IN userId=[" + userId + "]");
 
         Query querys = pm.newQuery(LocationData.class);
-        querys.setFilter("id == idParams");
-        querys.declareParameters("Long idParams");
-        List<LocationData> locationDataList = (List<LocationData>)querys.execute(id);
+        querys.setFilter("userId == userIdParams");
+        querys.declareParameters("String userIdParams");
+        List<LocationData> locationDataList = (List<LocationData>)querys.execute(userId);
         if (0 < locationDataList.size()) {
             logger.log(Level.CONFIG, "OUT(OK)");
             return locationDataList.get(0);
@@ -197,16 +204,22 @@ public class SetLocationServlet extends HttpServlet {
             LocationData data = locationDataList.get(i);
 
             Map<String, String> jsonMap = new HashMap<String, String>();
-            jsonMap.put("id",        data.getId());
-            jsonMap.put("nickname",  data.getNickname());
-            jsonMap.put("latitude",  data.getLatitude());
-            jsonMap.put("longitude", data.getLongitude());
-            logger.log(Level.CONFIG, "id=[" + data.getId() + "] nickname=[" + data.getNickname() + "] latitude=[" + String.valueOf(data.getLatitude()) + "] longitude=[" + String.valueOf(data.getLongitude()) + "]");
+            jsonMap.put(Key.USER_ID,                 data.getUserId());
+            jsonMap.put(Key.ROOM_NO,  String.valueOf(data.getRoomNo()));
+            jsonMap.put(Key.NICKNAME,                data.getNickname());
+            jsonMap.put(Key.LATITUDE,                data.getLatitude());
+            jsonMap.put(Key.LONGITUDE,               data.getLongitude());
+            logger.log(Level.CONFIG,
+                "userId=["      + data.getUserId()                    +
+                "] roomNo=["    + data.getRoomNo()                    +
+                "] nickname=["  + data.getNickname()                  +
+                "] latitude=["  + String.valueOf(data.getLatitude())  +
+                "] longitude=[" + String.valueOf(data.getLongitude()) + "]");
 
             locations[i] = new JSONObject(jsonMap);
         }
         try {
-            root.put("locations", locations);
+            root.put(Key.LOCATIONS, locations);
         } catch (JSONException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }

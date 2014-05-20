@@ -24,14 +24,14 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
- * 入室サーブレット
+ * 退室サーブレット
  *
  * @version 1.0 新規作成
  */
-public class EnterServlet extends HttpServlet {
+public class ExitServlet extends HttpServlet {
 
     /** ロガー */
-    private static final Logger logger = Logger.getLogger(EnterServlet.class.getName());
+    private static final Logger logger = Logger.getLogger(ExitServlet.class.getName());
 
     /**
      * POSTメソッドの処理を行う。
@@ -49,19 +49,15 @@ public class EnterServlet extends HttpServlet {
 
         // リクエストからパラメータを取得する。
         String roomNoString = request.getParameter(Key.ROOM_NO );
-        String password     = request.getParameter(Key.PASSWORD);
         String userId       = request.getParameter(Key.USER_ID );
-        String nickname     = request.getParameter(Key.NICKNAME);
 
         String responseString = "";
         boolean status = false;
 
         // パラメータが取得できた場合
         if (StringUtil.isNotNullOrEmpty(roomNoString) &&
-            StringUtil.isNotNullOrEmpty(password) &&
-            StringUtil.isNotNullOrEmpty(userId) &&
-            StringUtil.isNotNullOrEmpty(nickname)) {
-            logger.log(Level.CONFIG, "roomNo=[" + roomNoString + "] password=[" + password + "] userId=[" + userId + "] nickname=[" + nickname + "]");
+            StringUtil.isNotNullOrEmpty(userId)) {
+            logger.log(Level.CONFIG, "roomNo=[" + roomNoString + "] userId=[" + userId + "]");
 
             // 部屋番号を数値に変換する。
             long roomNo = Long.parseLong(roomNoString);
@@ -79,65 +75,49 @@ public class EnterServlet extends HttpServlet {
                 usedQuery.declareParameters("String userIdParams");
                 usedDataList = (List<UsedData>)usedQuery.execute(userId);
 
-                // 部屋データを取得する。
-                RoomData roomData = pm.getObjectById(RoomData.class, roomNo);
+                // 使用中データがある場合
+                if ((null != usedDataList) && (0 != usedDataList.size())) {
+                    // 部屋データ解放フラグをクリアする。
+                    boolean releaseFlg = false;
 
-                // 使用中データを取得できない場合、未使用とする。
-                if ((null == usedDataList) || (0 == usedDataList.size())) {
-                    logger.log(Level.CONFIG, "userData not exist.");
+                    // 使用中データ数分繰り返す。
+                    for (UsedData usedData : usedDataList) {
+                        // 該当の部屋番号の場合
+                        if (roomNo == usedData.getRoomNo()) {
+                            // 使用中データを削除する。
+                            pm.deletePersistent(roomNo);
 
-                    // 部屋データが取得できた場合
-                    if (null != roomData) {
-                        logger.log(Level.CONFIG, "roomData exist.");
+                            // 使用中データが1つだった場合
+                            if (1 == usedDataList.size()) {
+                                // 部屋データ解放フラグを設定する。
+                                releaseFlg = true;
+                            }
 
-                        // 部屋データを更新する。
-                        roomData.setUsed(true);
-                        roomData.setPassword(password);
-                        roomData.setUserId(userId);
-                        roomData.setNickname(nickname);
-                        roomData.setUpdate(new Date());
-                        pm.makePersistent(roomData);
-                        logger.log(Level.CONFIG, "roomData update.");
-
-                        // 使用中データを登録する。
-                        UsedData usedData = new UsedData(roomNo, userId);
-                        pm.makePersistent(usedData);
-                        logger.log(Level.CONFIG, "usedData regist.");
-
-                        status = true;
-                        logger.log(Level.CONFIG, "status true.");
-                    } else {
-                        logger.log(Level.CONFIG, "roomData not exist.");
+                            // ループを終了する。
+                            break;
+                        }
                     }
 
-                // 使用中データが取得できた場合、使用中とする。
-                } else {
-                    logger.log(Level.CONFIG, "userData exist.");
+                    // 位置データを削除する。
+                    LocationData locationData = pm.getObjectById(LocationData.class, userId);
+                    pm.deletePersistent(locationData);
 
-                    // 部屋データが取得できない場合
-                    if (null == roomData) {
-                        logger.log(Level.CONFIG, "roomData not exist.");
+                    // 部屋データ解放の場合
+                    if (releaseFlg) {
+                        // 部屋データを取得する。
+                        RoomData roomData = pm.getObjectById(RoomData.class, roomNo);
 
-                        // 使用中データを削除する。
-                        UsedData usedData = usedDataList.get(0);
-                        pm.deletePersistent(usedData);
-                        logger.log(Level.CONFIG, "UsedData delete.");
-
-                    // 部屋データを取得できた場合
-                    } else {
-                        logger.log(Level.CONFIG, "roomData exist.");
-
-                        // パスワードが等しい場合
-                        if (password.equals(roomData.getPassword())) {
-                            logger.log(Level.CONFIG, "password correct.");
-
-                            status = true;
-                            logger.log(Level.CONFIG, "status true.");
-                        } else {
-                            logger.log(Level.CONFIG, "password not correct.");
+                        // 部屋データが取得できた場合
+                        if (null != roomData) {
+                            // 部屋データの使用中フラグを未使用に設定して更新する。
+                            roomData.setUsed(false);
+                            roomData.setUpdate(new Date());
+                            pm.makePersistent(roomData);
                         }
                     }
                 }
+
+                status = true;
 
                 transaction.commit();
             } catch (Exception e) {

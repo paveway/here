@@ -7,15 +7,31 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+/**
+ * 部屋データクラス
+ *
+ * @version 1.0 新規作成
+ *
+ */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class RoomData {
 
     /** ルーム番号 */
     @PrimaryKey private Long roomNo;
+
+    /** 使用中フラグ */
     @Persistent private boolean used;
+
+    /** パスワード */
     @Persistent private String password;
+
+    /** ユーザーID */
     @Persistent private String userId;
+
+    /** ニックネーム */
     @Persistent private String nickname;
+
+    /** 更新日時 */
     @Persistent private Date update;
 
     /**

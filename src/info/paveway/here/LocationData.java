@@ -8,23 +8,30 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class LocationData {
 
-    @PrimaryKey private String id;
+    @PrimaryKey private String userId;
+    @Persistent private Long   roomNo;
     @Persistent private String nickname;
     @Persistent private String latitude;
     @Persistent private String longitude;
 
-    public LocationData(String id, String nickname, String latitude, String longitude) {
-        this.id        = id;
+    public LocationData() {
+    }
+
+    public LocationData(String userId, Long roomNo, String nickname, String latitude, String longitude) {
+        this.userId    = userId;
+        this.roomNo    = roomNo;
         this.nickname  = nickname;
         this.latitude  = latitude;
         this.longitude = longitude;
     }
 
-    public void setId(       String id       ) { this.id        = id;        }
+    public void setUserId(   String userId   ) { this.userId    = userId;    }
+    public void setRoomNo(   Long   roomNo   ) { this.roomNo    = roomNo;    }
     public void setNickname( String nickname ) { this.nickname  = nickname;  }
     public void setLatitude( String latitude ) { this.latitude  = latitude;  }
     public void setLongitude(String longitude) { this.longitude = longitude; }
-    public String getId()        { return id;        }
+    public String getUserId()    { return userId;    }
+    public Long   getRoomNo()    { return roomNo;    }
     public String getNickname()  { return nickname;  }
     public String getLatitude()  { return latitude;  }
     public String getLongitude() { return longitude; }
