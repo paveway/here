@@ -1,7 +1,6 @@
 package info.paveway.here.servlet;
 
-import info.paveway.here.CommonConstants.JSONKey;
-import info.paveway.here.CommonConstants.ReqParamKey;
+import info.paveway.here.CommonConstants.ParamKey;
 import info.paveway.here.data.PMF;
 import info.paveway.here.data.UserData;
 import info.paveway.util.StringUtil;
@@ -50,11 +49,12 @@ public class RegistUserServlet extends AbstractBaseServlet {
         logger.log(Level.INFO, "IN");
 
         // リクエストからパラメータを取得する。
-        String userName = request.getParameter(ReqParamKey.USER_NAME);
-        String password = request.getParameter(ReqParamKey.USER_PASSWORD);
+        String userName = request.getParameter(ParamKey.USER_NAME);
+        String password = request.getParameter(ParamKey.USER_PASSWORD);
         logger.log(Level.CONFIG, "userName=[" + userName + "] password=[" + password + "]");
 
         boolean status = false;
+
         UserData userData = null;
 
         // パラメータが取得できた場合
@@ -123,16 +123,16 @@ public class RegistUserServlet extends AbstractBaseServlet {
             JSONObject json = new JSONObject();
 
             // ステータスを出力する。
-            json.put(JSONKey.STATUS, status);
+            json.put(ParamKey.STATUS, status);
 
             // ステータスが成功の場合
             if (status) {
                 // ユーザデータを出力する。
-                json.put(JSONKey.USER_ID,          userData.getUserId());
-                json.put(JSONKey.USER_NAME,        userData.getUserName());
-                json.put(JSONKey.USER_PASSWORD,    userData.getPassword());
-                json.put(JSONKey.USER_LOGGED,      userData.getLogged());
-                json.put(JSONKey.USER_UPDATE_TIME, userData.getUpdateTime());
+                json.put(ParamKey.USER_ID,          userData.getUserId());
+                json.put(ParamKey.USER_NAME,        userData.getUserName());
+                json.put(ParamKey.USER_PASSWORD,    userData.getPassword());
+                json.put(ParamKey.USER_LOGGED,      userData.getLogged());
+                json.put(ParamKey.USER_UPDATE_TIME, userData.getUpdateTime());
             }
 
             // レスポンス文字列を生成する。

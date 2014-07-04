@@ -1,6 +1,6 @@
 package info.paveway.here.servlet;
 
-import info.paveway.here.CommonConstants.JSONKey;
+import info.paveway.here.CommonConstants.ParamKey;
 import info.paveway.here.data.PMF;
 import info.paveway.here.data.RoomData;
 
@@ -104,7 +104,7 @@ public class RoomListServlet extends AbstractBaseServlet {
             JSONObject json = new JSONObject();
 
             // ステータスを出力する。
-            json.put(JSONKey.STATUS, status);
+            json.put(ParamKey.STATUS, status);
 
             // ステータスが成功の場合
             if (status) {
@@ -112,7 +112,7 @@ public class RoomListServlet extends AbstractBaseServlet {
                 int roomNum = roomDataList.size();
 
                 // ルームデータ数を出力する。
-                json.put(JSONKey.ROOM_DATA_NUM, String.valueOf(roomNum));
+                json.put(ParamKey.ROOM_DATA_NUM, String.valueOf(roomNum));
 
                 // ルームデータ配列を生成する。
                 JSONObject[] roomDataArray = new JSONObject[roomNum];
@@ -124,15 +124,15 @@ public class RoomListServlet extends AbstractBaseServlet {
 
                     // ルームデータを設定する。
                     Map<String, String> roomDataMap = new HashMap<String, String>();
-                    roomDataMap.put(JSONKey.ROOM_ID,          String.valueOf(roomData.getRoomId()));
-                    roomDataMap.put(JSONKey.ROOM_NAME,                       roomData.getRoomName());
-                    roomDataMap.put(JSONKey.ROOM_KEY,                        roomData.getRoomKey());
-                    roomDataMap.put(JSONKey.OWNER_ID,         String.valueOf(roomData.getOwnerId()));
-                    roomDataMap.put(JSONKey.OWNER_NAME,                      roomData.getOwnerName());
-                    roomDataMap.put(JSONKey.ROOM_UPDATE_TIME, String.valueOf(roomData.getUpdateTime()));
+                    roomDataMap.put(ParamKey.ROOM_ID,          String.valueOf(roomData.getRoomId()));
+                    roomDataMap.put(ParamKey.ROOM_NAME,                       roomData.getRoomName());
+                    roomDataMap.put(ParamKey.ROOM_KEY,                        roomData.getRoomKey());
+                    roomDataMap.put(ParamKey.OWNER_ID,         String.valueOf(roomData.getOwnerId()));
+                    roomDataMap.put(ParamKey.OWNER_NAME,                      roomData.getOwnerName());
+                    roomDataMap.put(ParamKey.ROOM_UPDATE_TIME, String.valueOf(roomData.getUpdateTime()));
 
                     roomDataArray[i] = new JSONObject(roomDataMap);
-                    json.put(JSONKey.ROOM_DATAS, roomDataArray);
+                    json.put(ParamKey.ROOM_DATAS, roomDataArray);
                 }
             }
 

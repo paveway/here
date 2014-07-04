@@ -1,6 +1,6 @@
 package info.paveway.here.filter;
 
-import info.paveway.here.CommonConstants.ReqParamKey;
+import info.paveway.here.CommonConstants.ParamKey;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class EncodingFilter implements Filter {
      */
     @Override
     public void init(FilterConfig config) throws ServletException {
-        encoding = config.getInitParameter(ReqParamKey.ENCODING);
+        encoding = config.getInitParameter(ParamKey.ENCODING);
     }
 
     /**

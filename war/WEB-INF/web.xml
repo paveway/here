@@ -47,7 +47,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>DeleteRoom</servlet-name>
     <servlet-class>info.paveway.here.servlet.DeleteRoomServlet</servlet-class>
   </servlet>
-<!--
   <servlet>
     <servlet-name>EnterRoom</servlet-name>
     <servlet-class>info.paveway.here.servlet.EnterRoomServlet</servlet-class>
@@ -56,7 +55,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>ExitRoom</servlet-name>
     <servlet-class>info.paveway.here.servlet.ExitRoomServlet</servlet-class>
   </servlet>
- -->
+  <servlet>
+    <servlet-name>SendLocation</servlet-name>
+    <servlet-class>info.paveway.here.servlet.SendLocationServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>RegistUser</servlet-name>
@@ -86,7 +88,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>DeleteRoom</servlet-name>
     <url-pattern>/deleteRoom</url-pattern>
   </servlet-mapping>
-<!--
   <servlet-mapping>
     <servlet-name>EnterRoom</servlet-name>
     <url-pattern>/enterRoom</url-pattern>
@@ -95,7 +96,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>ExitRoom</servlet-name>
     <url-pattern>/exitRoom</url-pattern>
   </servlet-mapping>
- -->
+  <servlet-mapping>
+    <servlet-name>SendLocation</servlet-name>
+    <url-pattern>/sendLocation</url-pattern>
+  </servlet-mapping>
 
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

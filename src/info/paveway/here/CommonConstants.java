@@ -21,15 +21,12 @@ public class CommonConstants {
     }
 
     /**
-     * リクエストパラメータキー
+     * パラメータキー
      *
      */
-    public class ReqParamKey {
+    public class ParamKey {
         /** エンコーディング */
         public static final String ENCODING = "encoding";
-
-        /** ステータス */
-        public static final String STATUS = "status";
 
         /** ユーザID */
         public static final String USER_ID = "userId";
@@ -61,63 +58,17 @@ public class CommonConstants {
         /** オーナー名 */
         public static final String OWNER_NAME = "ownerName";
 
-        /** 使用中カウント */
-        public static final String USED_COUNT = "usedCount";
+        /** 緯度 */
+        public static final String LATITUDE = "latitude";
+
+        /** 経度 */
+        public static final String LONGITUDE = "longitude";
 
         /** ルーム更新日時 */
         public static final String ROOM_UPDATE_TIME = "roomUpdateTime";
 
-        /** ルーム配列 */
-        public static final String ROOMS = "rooms";
-
-        /** 位置情報配列 */
-        public static final String LOCATIONS = "locations";
-    }
-
-    /**
-     * JSONキー
-     *
-     */
-    public class JSONKey {
-
         /** ステータス */
-        public static final String STATUS = ReqParamKey.STATUS;
-
-        /** ユーザID */
-        public static final String USER_ID = ReqParamKey.USER_ID;
-
-        /** ユーザ名 */
-        public static final String USER_NAME = ReqParamKey.USER_NAME;
-
-        /** ユーザパスワード */
-        public static final String USER_PASSWORD = ReqParamKey.USER_PASSWORD;
-
-        /** ユーザログイン済みフラグ */
-        public static final String USER_LOGGED = ReqParamKey.USER_LOGGED;
-
-        /** ユーザ更新日時 */
-        public static final String USER_UPDATE_TIME = ReqParamKey.USER_UPDATE_TIME;
-
-        /** ルームID */
-        public static final String ROOM_ID = ReqParamKey.ROOM_ID;
-
-        /** ルーム名 */
-        public static final String ROOM_NAME = ReqParamKey.ROOM_NAME;
-
-        /** ルームキー */
-        public static final String ROOM_KEY = ReqParamKey.ROOM_KEY;
-
-        /** オーナーID */
-        public static final String OWNER_ID = ReqParamKey.OWNER_ID;
-
-        /** オーナー名 */
-        public static final String OWNER_NAME = ReqParamKey.OWNER_NAME;
-
-        /** 使用中カウント */
-        public static final String USED_COUNT = ReqParamKey.USED_COUNT;
-
-        /** ルーム更新日時 */
-        public static final String ROOM_UPDATE_TIME = ReqParamKey.ROOM_UPDATE_TIME;
+        public static final String STATUS = "status";
 
         /** ルームデータ配列 */
         public static final String ROOM_DATAS = "roomDatas";
@@ -127,6 +78,9 @@ public class CommonConstants {
 
         /** 位置データ配列 */
         public static final String LOCATION_DATAS = "locationDatas";
+
+        /** 位置データ数 */
+        public static final String LOCATION_DATA_NUM = "locationDataNum";
     }
 
     /**
@@ -136,5 +90,38 @@ public class CommonConstants {
     public class Encoding {
         /** UTF-8 */
         public static final String UTF_8 = "UTF-8";
+    }
+
+    /**
+     * ステータス値
+     *
+     */
+    public class Status {
+        /** 正常終了 */
+        public static final int SUCCESS = 0;
+
+        /** その他エラー */
+        public static final int ERROR = 1;
+
+        /** パラメータエラー */
+        public static final int PARAM_EROR = 2;
+
+        /** DBエラー */
+        public static final int DB_ERROR = 3;
+
+        /** ユーザ登録済みエラー */
+        public static final int USER_REGISTED_ERROR = 4;
+
+        /** ユーザ存在無エラー */
+        public static final int NO_USER_ERROR = 5;
+
+        /** ユーザパスワードエラー */
+        public static final int USER_PASSWORD_ERROR = 6;
+
+        /** ログイン済みエラー */
+        public static final int LOGINED_ERROR = 7;
+
+        /** ルーム登録済みエラー */
+        public static final int ROOM_REGISTED_ERROR = 8;
     }
 }

@@ -1,7 +1,6 @@
 package info.paveway.here.servlet;
 
-import info.paveway.here.CommonConstants.JSONKey;
-import info.paveway.here.CommonConstants.ReqParamKey;
+import info.paveway.here.CommonConstants.ParamKey;
 import info.paveway.here.data.PMF;
 import info.paveway.here.data.UserData;
 import info.paveway.util.StringUtil;
@@ -49,8 +48,8 @@ public class DeleteUserServlet extends AbstractBaseServlet {
         logger.log(Level.INFO, "IN");
 
         // リクエストからパラメータを取得する。
-        String userName = request.getParameter(ReqParamKey.USER_NAME);
-        String password = request.getParameter(ReqParamKey.USER_PASSWORD);
+        String userName = request.getParameter(ParamKey.USER_NAME);
+        String password = request.getParameter(ParamKey.USER_PASSWORD);
         logger.log(Level.CONFIG, "userName=[" + userName + "] password=[" + password + "]");
 
         boolean status = false;
@@ -126,7 +125,7 @@ public class DeleteUserServlet extends AbstractBaseServlet {
             JSONObject json = new JSONObject();
 
             // ステータスを出力する。
-            json.put(JSONKey.STATUS, status);
+            json.put(ParamKey.STATUS, status);
 
             // レスポンス文字列を生成する。
             responseString = json.toString();
