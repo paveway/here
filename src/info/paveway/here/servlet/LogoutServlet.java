@@ -17,9 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
@@ -61,9 +58,6 @@ public class LogoutServlet extends AbstractBaseServlet {
             // パーシステンスマネージャーを取得する。
             PersistenceManager pm = PMF.get().getPersistenceManager();
 
-            // トランザクションを開始する。
-            DatastoreService dss = DatastoreServiceFactory.getDatastoreService();
-            Transaction transaction = dss.beginTransaction();
             try {
                 // ユーザデータを取得する。
                 Query usedQuery = pm.newQuery(UserData.class);
@@ -88,9 +82,6 @@ public class LogoutServlet extends AbstractBaseServlet {
                         pm.makePersistent(userData);
                     }
                 }
-
-                // コミットする。
-                transaction.commit();
             } catch (Exception e) {
                 logger.log(Level.SEVERE, e.getMessage());
 
@@ -98,22 +89,6 @@ public class LogoutServlet extends AbstractBaseServlet {
                 status = false;
 
             } finally {
-                try {
-                    // トランザクションが有効のままの場合
-                    if (transaction.isActive()) {
-                        // ステータスをエラーにする。
-                        status = false;
-
-                        // ロールバックする。
-                        transaction.rollback();
-                    }
-                } catch (Exception e) {
-                    logger.log(Level.SEVERE, e.getMessage());
-
-                    // ステータスをエラーにする。
-                    status = false;
-                }
-
                 // パーシスタントマネージャが有効かつクローズされていない場合
                 if ((null != pm) && !pm.isClosed()) {
                     // クローズする。

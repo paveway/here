@@ -168,11 +168,11 @@ public class SendLocationServlet extends AbstractBaseServlet {
 
                     // 位置データを設定する。
                     Map<String, String> locationDataMap = new HashMap<String, String>();
-                    locationDataMap.put(ParamKey.USER_ID,          String.valueOf(useRoomData.getUserId()));
-                    locationDataMap.put(ParamKey.USER_NAME,                       useRoomData.getUserName());
-                    locationDataMap.put(ParamKey.LATITUDE,         String.valueOf(useRoomData.getLatitude()));
-                    locationDataMap.put(ParamKey.LONGITUDE,        String.valueOf(useRoomData.getLongitude()));
-                    locationDataMap.put(ParamKey.ROOM_UPDATE_TIME, String.valueOf(roomData.getUpdateTime()));
+                    locationDataMap.put(ParamKey.USER_ID,              String.valueOf(useRoomData.getUserId()));
+                    locationDataMap.put(ParamKey.USER_NAME,                           useRoomData.getUserName());
+                    locationDataMap.put(ParamKey.LATITUDE,             String.valueOf(useRoomData.getLatitude()));
+                    locationDataMap.put(ParamKey.LONGITUDE,            String.valueOf(useRoomData.getLongitude()));
+                    locationDataMap.put(ParamKey.LOCATION_UPDATE_TIME, String.valueOf(useRoomData.getUpdateTime()));
 
                     locationDataArray[i] = new JSONObject(locationDataMap);
                     json.put(ParamKey.LOCATION_DATAS, locationDataArray);

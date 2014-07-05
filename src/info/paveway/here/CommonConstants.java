@@ -67,6 +67,9 @@ public class CommonConstants {
         /** ルーム更新日時 */
         public static final String ROOM_UPDATE_TIME = "roomUpdateTime";
 
+        /** 位置データ更新日時 */
+        public static final String LOCATION_UPDATE_TIME = "locationUpdateTime";
+
         /** ステータス */
         public static final String STATUS = "status";
 

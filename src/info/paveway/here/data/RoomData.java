@@ -1,5 +1,6 @@
 package info.paveway.here.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -38,7 +39,7 @@ public class RoomData {
     @Persistent private Long updateTime;
 
     /** ルーム使用データリスト */
-    @Persistent private List<UseRoomData> useRoomDataList;
+    @Persistent private List<UseRoomData> useRoomDataList = new ArrayList<UseRoomData>();
 
     /**
      * コンストラクタ

@@ -86,11 +86,7 @@ public class DeleteRoomServlet extends AbstractBaseServlet {
                         List<UseRoomData> useRoomDataList = roomData.getUseRoomDataList();
 
                         // ルーム使用データが1件の場合
-                        if (1 == useRoomDataList.size()) {
-                            // ルーム使用データを削除する。
-                            useRoomDataList.remove(0);
-                            roomData.setUseRoomDataList(useRoomDataList);
-
+                        if (0 == useRoomDataList.size()) {
                             // ルームデータを削除する。
                             pm.deletePersistent(roomData);
 

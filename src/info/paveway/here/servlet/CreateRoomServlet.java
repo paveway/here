@@ -66,9 +66,9 @@ public class CreateRoomServlet extends AbstractBaseServlet {
             StringUtil.isNotNullOrEmpty(roomKey) &&
             StringUtil.isNotNullOrEmpty(ownerId) &&
             StringUtil.isNotNullOrEmpty(ownerName)) {
+
             // パーシステンスマネージャーを取得する。
             PersistenceManager pm = PMF.get().getPersistenceManager();
-
             try {
                 // ルームデータを取得する。
                 Query roomQuery = pm.newQuery(RoomData.class);
@@ -80,10 +80,11 @@ public class CreateRoomServlet extends AbstractBaseServlet {
                 if(0 == userDataList.size()) {
                     long updateTime = new Date().getTime();
 
-                    // ルームデータを登録する。
+                    // ルームデータを設定する。
                     RoomData roomData = new RoomData(roomName, roomKey, Long.parseLong(ownerId), ownerName, updateTime);
+
+                    // ルームデータを登録する。
                     pm.makePersistent(roomData);
-                    logger.log(Level.INFO, "RoomData insert.");
 
                     // ルームデータを取得する。
                     Query newRoomQuery = pm.newQuery(RoomData.class);
@@ -91,6 +92,10 @@ public class CreateRoomServlet extends AbstractBaseServlet {
 
                     // ステータスを成功にする。
                     status = true;
+
+                // ルーム名が登録済みの場合
+                } else {
+                    logger.log(Level.WARNING, roomName + " is created.");
                 }
             } catch (Exception e) {
                 logger.log(Level.SEVERE, e.getMessage());
